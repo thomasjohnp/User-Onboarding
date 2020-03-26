@@ -10,10 +10,6 @@ const formSchema = yup.object().shape({
     .required("Must include email address."),
   terms: yup.boolean().oneOf([true], "please agree to terms of use"),
   password: yup.string().required("Password is required")
-  // passwordConfirmation: yup
-  //   .string()
-  //   .min(8, "Your password must be at least 8 characters in length")
-  //   .oneOf([yup.ref("password"), null], "Passwords must match"),
 });
 
 export default function Form() {
@@ -25,7 +21,6 @@ export default function Form() {
     name: "",
     email: "",
     password: "",
-    //passwordConfirmation: "",
     terms: ""
   });
 
@@ -34,7 +29,6 @@ export default function Form() {
     name: "",
     email: "",
     password: "",
-    // passwordConfirmation: "",
     terms: ""
   });
 
@@ -52,14 +46,13 @@ export default function Form() {
     axios
       .post("https://reqres.in/api/users", formState)
       .then(res => {
-        setPost(res.data); // get just the form data from the REST api
+        setPost([...post, res.data]); // get just the form data from the REST api
         console.log("success", post);
         // reset form if successful
         setFormState({
           name: "",
           email: "",
           password: "",
-          //   passwordConfirmation: "",
           terms: ""
         });
       })
@@ -71,7 +64,7 @@ export default function Form() {
     yup
       .reach(formSchema, e.target.name)
       .validate(e.target.value)
-      .then(valid => {
+      .then(_ => {
         setErrors({
           ...errors,
           [e.target.name]: ""
@@ -97,7 +90,7 @@ export default function Form() {
     setFormState(newFormData);
     return newFormData;
   };
-  console.log(buttonDisabled);
+
   return (
     <form onSubmit={formSubmit}>
       <h3>new user</h3>
